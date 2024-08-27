@@ -1,7 +1,10 @@
 {% extends "main/base.html" %}
 
 {% block style %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/blocks/table.css') }}"> {% endblock %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/blocks/table.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/libs/font-awesom.min.css') }}">
+{% endblock %}
+
 {% block title %}Темы{% endblock %}
 
 {% block content %}
@@ -12,6 +15,7 @@
                 <th scope="col">Преподаватель</th>
                 <th scope="col">Тема</th>
                 <th scope="col">Ученик</th>
+                <th scope="col">Действия</th>
             </tr>
         </thead>
         <tbody>
@@ -20,6 +24,10 @@
                 <td>{{ post.teacher }}</td>
                 <td>{{ post.subject }}</td>
                 <td>{{ post.student }}</td>
+            <td>
+                <a href="{{ url_for('post.update', id=post.id) }}" class="btn btn-sm btn-secondary"><span class="fa  fa-edit"></span></a>
+                <a href="{{ url_for('post.delete', id=post.id) }}" class="btn btn-sm btn-danger"><span class="fa  fa-trash"></span></a>
+            </td>
         </tr>
         {% endfor %}
         </tbody>
