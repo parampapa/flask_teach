@@ -6,6 +6,15 @@
     {{ form.csrf_token}}
     {{ form.name(class='form-control', placeholder='ФИО') }}
     {{ form.login(class='form-control', placeholder='Логин') }}
+    {% if form.login.errors %}
+    <div class="invalid-feedback" style="display: block!important;">
+        {% for error in form.login.errors %}
+            <p>{{ error }}</p>
+        {% endfor %}
+    </div>
+
+    {% endif %}
+
     {{ form.avatar(class='form-control', placeholder='аватар') }}
     {{ form.password(class='form-control', placeholder='Пароль') }}
     {{ form.confirm_password(class='form-control', placeholder='Повторите пароль') }}
