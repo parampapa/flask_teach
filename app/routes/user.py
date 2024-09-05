@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, flash
+from flask import Blueprint, render_template, redirect, flash, url_for
 
 from ..functions import save_picture
 from ..forms import RegistrationForm, LoginForm
@@ -22,14 +22,14 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash(f'Поздравляем {form.login.data}, регистрация успешна', 'success')
-        return redirect('/')
+        return redirect(url_for('user.login'))
     else:
-        print('Ошибка в данных')
+        flash('При регистрации произошла ошибка', 'danger')
     return render_template('user/register.html', form=form)
 
 
-@login.route('/user/login', methods=['POST', 'GET'])
-def register():
+@user.route('/user/login', methods=['POST', 'GET'])
+def login():
     form = LoginForm()
 
     return render_template('user/login.html', form=form)
