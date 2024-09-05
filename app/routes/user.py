@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, flash
 
 from ..functions import save_picture
-from ..forms import RegistrationForm
+from ..forms import RegistrationForm, LoginForm
 from ..extensions import db, bcrypt
 from ..models.user import User
 
@@ -26,3 +26,10 @@ def register():
     else:
         print('Ошибка в данных')
     return render_template('user/register.html', form=form)
+
+
+@login.route('/user/login', methods=['POST', 'GET'])
+def register():
+    form = LoginForm()
+
+    return render_template('user/login.html', form=form)
