@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, redirect, flash, url_for
-
+from flask import Blueprint, render_template, redirect, flash, url_for, request
+from flask_login import login_user, current_user, logout_user
 from ..functions import save_picture
 from ..forms import RegistrationForm, LoginForm
 from ..extensions import db, bcrypt
@@ -31,5 +31,12 @@ def register():
 @user.route('/user/login', methods=['POST', 'GET'])
 def login():
     form = LoginForm()
-
+    if form.validate_on_submit():
+        user = User.query.filter_by(login=form.login.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user, remember=form.remember.data)
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page else redirect(url_for('post.all'))
+        else:
+            flash('Неправильный логин или пароль', 'danger')
     return render_template('user/login.html', form=form)
