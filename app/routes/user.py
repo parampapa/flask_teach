@@ -19,12 +19,16 @@ def register():
                     login=form.login.data,
                     password=hashed_password,
                     avatar=avatar_filename)
-        db.session.add(user)
-        db.session.commit()
-        flash(f'Поздравляем {form.login.data}, регистрация успешна', 'success')
-        return redirect(url_for('user.login'))
-    else:
-        flash('При регистрации произошла ошибка', 'danger')
+        try:
+            db.session.add(user)
+            db.session.commit()
+            flash(f'Поздравляем {form.login.data}, регистрация успешна', 'success')
+            return redirect(url_for('user.login'))
+        except Exception as e:
+            print(str(e))
+            db.session.rollback()
+            flash('При регистрации произошла ошибка', 'danger')
+
     return render_template('user/register.html', form=form)
 
 
@@ -36,7 +40,15 @@ def login():
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
+            flash(f'Вы вошли как {user.login}', 'success')
             return redirect(next_page) if next_page else redirect(url_for('post.all'))
         else:
             flash('Неправильный логин или пароль', 'danger')
     return render_template('user/login.html', form=form)
+
+
+@user.route('/user/logout')
+def logout():
+    logout_user()
+    flash('Вы вышли из системы', 'success')
+    return redirect(url_for('post.all'))
