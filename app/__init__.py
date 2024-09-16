@@ -18,10 +18,11 @@ def create_app(config_class=Config):
     db.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
+    login_manager.login_message_category = 'info'  # Change to 'danger' for red messages in the login form.
 
     # LOGIN MANAGER
     login_manager.login_view = 'user.login'
-    login_manager.login_message = 'Для входа на страницу необходима выполнить вход.'
+    login_manager.login_message = 'Для входа на страницу необходимо выполнить вход.'
 
     with app.app_context():
         db.create_all()
