@@ -1,4 +1,6 @@
 from datetime import datetime
+
+from .post import Post
 from ..extensions import db, login_manager
 from flask_login import UserMixin
 
@@ -9,6 +11,7 @@ def load_user(user_id):
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
+    posts = db.relationship(Post, backref='author')
     status = db.Column(db.String(50), default='user')
     avatar = db.Column(db.String(200))
     name = db.Column(db.String(50), unique=True, nullable=False)
